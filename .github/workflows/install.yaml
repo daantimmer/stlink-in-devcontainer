@@ -1,0 +1,17 @@
+---
+name: Try to install stlink
+
+on:
+  push:
+
+jobs:
+  install:
+    name: ""
+    runs-on: ubuntu-latest
+    container: ghcr.io/philips-software/amp-devcontainer-cpp:5.1.0@sha256:a57da1a07a1f29f6a6cb0715d5de37b2ee0ae9c815d1522488373ebef8c7f4e2
+    steps:
+      - run: apt-get update
+      - run: apt-get install -y --no-install-recommends curl
+      - run: curl -LO https://github.com/stlink-org/stlink/releases/download/v1.8.0/stlink_1.8.0-1_amd64.deb
+      - run: apt-get install -y --no-install-recommends kmod
+      - run: apt-get install -y --no-install-recommends ./stlink_1.8.0-1_amd64.deb
