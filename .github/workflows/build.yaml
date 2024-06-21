@@ -1,0 +1,26 @@
+---
+name: Try to build stlink
+
+on:
+  push:
+
+jobs:
+  install:
+    name: ""
+    runs-on: ubuntu-latest
+    container: ghcr.io/philips-software/amp-devcontainer-cpp:5.1.0@sha256:a57da1a07a1f29f6a6cb0715d5de37b2ee0ae9c815d1522488373ebef8c7f4e2
+    steps:
+      - run: apt-get update
+      - run: apt-get install -y --no-install-recommends curl libusb-1.0 build-essential
+      - run: curl -LO https://github.com/stlink-org/stlink/archive/refs/tags/v1.8.0.tar.gz
+      - run: tar -xf v1.8.0.tar.gz
+      - run: |
+          cd stlink-1.8.0
+          mkdir -p build/Release
+          cd build/Release
+          cmake -DCMAKE_BUILD_TYPE=Release ../../
+          cmake --build .
+          cmake --build . --target install
+          ldconfig
+          cd ../../
+          st-util
